@@ -2,8 +2,7 @@
 # license: GPLv3
 import math
 
-G = 6.67408E-11 #gravitational constant
-"""Гравитационная постоянная Ньютона G"""
+gravitational_constant = 6.67408E-11  # """Гравитационная постоянная Ньютона G"""
 
 
 def calculate_force(body, space_objects):
@@ -21,8 +20,9 @@ def calculate_force(body, space_objects):
             continue  # тело не действует гравитационной силой на само себя!
 
         r = ((body.x - obj.x)**2 + (body.y - obj.y)**2)**0.5
-        body.Fx += -gravitational_constant * obj.m * body.m * (body.x - obj.x) / r ** 3
-        body.Fy += -gravitational_constant * obj.m * body.m * (body.y - obj.y) / r ** 3
+        F = (gravitational_constant * obj.m * body.m) / (r ** 2)
+        body.Fx += -F * ((body.x - obj.x) / r)
+        body.Fy += -F * ((body.y - obj.y) / r)
 
 def move_space_object(body, dt):
     """Перемещает тело в соответствии с действующей на него силой.
@@ -31,15 +31,12 @@ def move_space_object(body, dt):
 
     **body** — тело, которое нужно переместить.
     """
-
-    ax = body.Fx/body.m
-    body.Vx += ax*dt
-    body.x += body.Vy * dt * (ax*dt**2) * 1/2
-
-    ay = body.Fy/body.m
-    body.Vy += ay*dt
-    body.y += body.Vy * dt * (ay*dt**2) * 1/2
-
+    ax = body.Fx / body.m
+    ay = body.Fy / body.m
+    body.Vy += ay * dt
+    body.Vx += ax * dt
+    body.x += body.Vx * dt
+    body.y += body.Vy * dt
 
 
 def recalculate_space_objects_positions(space_objects, dt):

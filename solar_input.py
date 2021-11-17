@@ -19,16 +19,16 @@ def read_space_objects_data_from_file(input_filename):
             if len(line.strip()) == 0 or line[0] == '#':
                 continue  # пустые строки и строки-комментарии пропускаем
             object_type = line.split()[0].lower()
-            if object_type == 'Star':  # FIXME: do the same for planet
+            if object_type == "star":  # FIXME: do the same for planet
                 star = Star()
                 parse_star_parameters(line, star)
                 objects.append(star)
-            if object_type == 'Planet':
+            elif object_type == "planet":  # FIXME: do the same for planet
                 planet = Planet()
                 parse_planet_parameters(line, planet)
                 objects.append(planet)
             else:
-                print("Unknown space object")
+                    print("Bruh")
 
     return objects
 
@@ -44,19 +44,20 @@ def parse_star_parameters(line, star):
 
     Параметры:
 
-    **line** — строка с описанием звезды.
+    **line** — строка с описание звезды.
     **star** — объект звезды.
     """
-    data = line.split()
-    star.type = data[0]
-    star.R = int(data[1])
-    star.color = data[2]
-    star.m = float(data[3])
-    star.x = abs(data[4])
-    star.y = abs(data[5])
-    star.Vx = float(data[6])
-    star.Vy = float(data[7])
-
+    arr = line.split()
+    if arr[0] == "Star":
+        star.R = int(arr[1])
+        star.color = arr[2]
+        star.m = float(arr[3])
+        star.x = float(arr[4])
+        star.y = float(arr[5])
+        star.Vx = float(arr[6])
+        star.Vy = float(arr[7])
+    else:
+        print("It`s not a star.")
 
 def parse_planet_parameters(line, planet):
     """Считывает данные о планете из строки.
@@ -73,15 +74,17 @@ def parse_planet_parameters(line, planet):
     **line** — строка с описание планеты.
     **planet** — объект планеты.
     """
-    data = line.split()
-    planet.type = data[0]
-    planet.R = int(data[1])
-    planet.color = data[2]
-    planet.m = float(data[3])
-    planet.x = abs(data[4])
-    planet.y = abs(data[5])
-    planet.Vx = float(data[6])
-    planet.Vy = float(data[7])
+    arr = line.split()
+    if arr[0] == "Planet":
+        planet.R = int(arr[1])
+        planet.color = arr[2]
+        planet.m = float(arr[3])
+        planet.x = float(arr[4])
+        planet.y = float(arr[5])
+        planet.Vx = float(arr[6])
+        planet.Vy = float(arr[7])
+    else:
+        print("It`s not a planet.")
 
 
 def write_space_objects_data_to_file(output_filename, space_objects):
@@ -95,16 +98,10 @@ def write_space_objects_data_to_file(output_filename, space_objects):
     **output_filename** — имя входного файла
     **space_objects** — список объектов планет и звёзд
     """
-
-    with open(output_filename, 'w') as out_file:
+    with open(output_filename, 'a') as out_file:
         for obj in space_objects:
-            append_data = ""
-            if type(object) == 'Star' or 'Planet':
-                append_data = Str(obj.type) + ' ' + Str(obj.R) + ' ' + Str(obj.color) + ' ' + Str(obj.x) + ' ' + Str(obj.y) + \
-                              ' ' + Str(obj.Vx) + ' ' + Str(obj.Vy)
-                out_file.append(append_data)
-
-    out_file.close()
+            if obj.type == 'planet' or 'star':
+                print(obj.type, 'Radius:', obj.R, 'Color:', obj.color, 'Mass:', obj.m, 'x:', obj.x, 'y:', obj.y, 'Vx:', obj.Vx, 'Vy:', obj.Vy, file=out_file)
 # FIXME: хорошо бы ещё сделать функцию, сохранающую статистику в заданный файл...
 
 if __name__ == "__main__":
